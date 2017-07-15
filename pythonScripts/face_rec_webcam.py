@@ -10,13 +10,16 @@ push_service = FCMNotification(api_key="AAAAXcxEn-s:APA91bFNEwRE8zcelyBM8dhbQ1hD
 
 # Get a reference to webcam #0 (the default one)
 video_capture = cv2.VideoCapture(0)
-
+# video_capture.set(3,1280)
+# video_capture.set(4,480)
 
 names = []
 
 # Load a sample picture and learn how to recognize it.
-# varun_image = face_recognition.load_image_file("varun")
+# varun_image = face_recognition.load_image_file("faces/Emma")
 # varun_face_encoding = face_recognition.face_encodings(varun_image)[0]
+# print("HERE!!")
+# print(varun_face_encoding)
 # second_image = face_recognition.load_image_file("peter2.png")
 # second_face_encoding = face_recognition.face_encodings(second_image)[0]
 
@@ -30,6 +33,8 @@ face_locations = []
 face_encodings = []
 face_names = []
 counter = 0
+notificationQueue = []
+scaling_factor = 3
 
 # configure firebase
 config = {
@@ -55,10 +60,10 @@ def save_frame(filepath, frame):
     FUNCTION: sends a picture to the storage bucket and makes a post to the database
 '''
 def send_frame_to_database(key, picture_path, name):
-    
+
     storage.child("images/" + key).put(picture_path)
     url = storage.child("images/" + key).get_url(None)
-    
+
     upload_dict = {"name": name, "timestamp":{".sv": "timestamp"}, "photoURL": url}
     db.child("savedFrames").child(key).set(upload_dict)
 
@@ -95,28 +100,31 @@ def stream_handler(message):
     if message["data"]:
         file_name = "faces/"
         data = message["data"]
-        print(data)
+#        print(data)
         if type(data) is dict:
             if "mediaURL" in data:
-                print("SINGLE ITEM")
+#                print("SINGLE ITEM")
                 mediaURL = str(data["mediaURL"])
                 name = str(data["name"])
-                print(mediaURL, name)
+#                print(mediaURL, name)
                 urllib.urlretrieve(mediaURL, file_name + name)
                 names.append(name)
                 known_encodings.append(face_recognition.face_encodings(face_recognition.load_image_file(file_name + name))[0])
-                
+
             else:
                 print("MULTIPLE ITEMS")
 
                 for key,value in data.items():
                     mediaURL = str(value["mediaURL"])
                     name = str(value["name"])
-                    print(mediaURL, name)
+#                    print(mediaURL, name)
                     urllib.urlretrieve(mediaURL, file_name + name)
-                    names.append(name)
-                    print(names)
-                    known_encodings.append(face_recognition.face_encodings(face_recognition.load_image_file(file_name + name))[0])
+                    try:
+                        tmp = face_recognition.face_encodings(face_recognition.load_image_file(file_name + name))[0]
+                        known_encodings.append(tmp)
+                        names.append(name)
+                    except:
+                        print("Couldn't find a face for " + name + "!!! Crap...")
         else:
             print("data is not a dictttt")
     else:
@@ -129,8 +137,24 @@ def stream_handler(message):
 def startStream():
     db.child("test").stream(stream_handler)
 
+def notificationSender():
+    while True:
+        while len(notificationQueue) > 0:
+            notification = notificationQueue.pop()
+            notification_frame = notification[0]
+            notification_name = notification[1]
+            notification_key = notification[2]
+            save_frame("saved_frames/" + notification_key + ".jpg", notification_frame)
+            send_frame_to_database(notification_key, "saved_frames/" + notification_key + ".jpg", notification_name)
+            send_FCM_Notification(notification_name)
+
+
+
 # start stream on another thread so the camera can run on main thread
 thread.start_new_thread(startStream, ())
+
+# start notification sender on another thread
+thread.start_new_thread(notificationSender, ())
 
 
 # start the camera stream on the main thread
@@ -139,10 +163,10 @@ while True:
     ret, frame = video_capture.read()
 
     # Resize frame of video to 1/4 size for faster face recognition processing
-    small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+    small_frame = cv2.resize(frame, (0, 0), fx=1.0/scaling_factor, fy=1.0/scaling_factor)
 
     # Only process every other frame of video to save time
-    if counter % 60 == 0:
+    if counter % 12 == 0:
         # Find all the faces and face encodings in the current frame of video
         face_locations = face_recognition.face_locations(small_frame)
         face_encodings = face_recognition.face_encodings(small_frame, face_locations)
@@ -150,17 +174,21 @@ while True:
         face_names = []
         for face_encoding in face_encodings:
             # See if the face is a match for the known face(s)
-            match = face_recognition.compare_faces(known_encodings, face_encoding)
+            match = list(face_recognition.face_distance(known_encodings, face_encoding))
             name = "Unknown"
+            best_match_dist = 1
             for i in range(len(match)):
-                if match[i]:
+                if match[i] < best_match_dist and match[i] < .55:
+                    best_match_dist = match[i]
                     name = names[i]
-        
+
             if should_send_notification(name):
+                last_sent_notifications[name] = time.time()
                 random_key = db.generate_key()
-                save_frame("saved_frames/" + random_key + ".jpg", frame)
-                send_frame_to_database(random_key, "saved_frames/" + random_key + ".jpg", name)
-                send_FCM_Notification(name)
+                notificationQueue.append((frame, name, random_key))
+                # save_frame("saved_frames/" + random_key + ".jpg", frame)
+                # send_frame_to_database(random_key, "saved_frames/" + random_key + ".jpg", name)
+                # send_FCM_Notification(name)
 
             # if match[0]:
             #     name = "Varun"
@@ -175,11 +203,11 @@ while True:
 
     # Display the results
     for (top, right, bottom, left), name in zip(face_locations, face_names):
-        # Scale back up face locations since the frame we detected in was scaled to 1/4 size
-        top *= 4
-        right *= 4
-        bottom *= 4
-        left *= 4
+        # Scale back up face locations since the frame we detected in was scaled
+        top *= scaling_factor
+        right *= scaling_factor
+        bottom *= scaling_factor
+        left *= scaling_factor
 
         # Draw a box around the face
         cv2.rectangle(frame, (left, top), (right, bottom), (254,110,111), 2)
@@ -200,5 +228,3 @@ while True:
 # Release handle to the webcam
 video_capture.release()
 cv2.destroyAllWindows()
-
-
