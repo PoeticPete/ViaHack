@@ -1,0 +1,16 @@
+gapic_google_cloud_speech_v1-0.15.3-py2.7-nspkg.pth,sha256=9699ktgWeEArLGCTzDkFZpyShOW2MF0C1kiYzKMMY_k,6038
+gapic_google_cloud_speech_v1-0.15.3.dist-info/DESCRIPTION.rst,sha256=TsBgNI7mW03d4KlHAyTBEueb8NshH7Nktkj9cesJfNY,2338
+gapic_google_cloud_speech_v1-0.15.3.dist-info/METADATA,sha256=_CMyiUoZpTGmHyD9jEuE15Ie8RpkouNV7btpc2jakJY,3403
+gapic_google_cloud_speech_v1-0.15.3.dist-info/RECORD,,
+gapic_google_cloud_speech_v1-0.15.3.dist-info/WHEEL,sha256=BtVfdXUcEYLcFjOkbIrCFRyXU4qszVPt-E9o3RWkSNw,93
+gapic_google_cloud_speech_v1-0.15.3.dist-info/metadata.json,sha256=JhI2J7bqGTfsCJG4CBcaFhzlGbI9Nmr_PFZbHRkECEk,1169
+gapic_google_cloud_speech_v1-0.15.3.dist-info/namespace_packages.txt,sha256=TQeHr-RMiNqg8CQxZXN-UjeAugqvVu4JsFN0sbHcKHE,65
+gapic_google_cloud_speech_v1-0.15.3.dist-info/top_level.txt,sha256=_1QvSJIhFAGfxb79D6DhB7SUw2X6T4rwnz_LLrbcD3c,7
+google/cloud/gapic/speech/v1/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+google/cloud/gapic/speech/v1/enums.py,sha256=bK-eAPmlZGVx5lT1VlSTh2t391OUJ79TXCUCD1dZGBA,4620
+google/cloud/gapic/speech/v1/speech_client.py,sha256=DgRNg4DODYU3jdZCG1esokRLTMxIgSWBAZn18Egs3s8,12523
+google/cloud/gapic/speech/v1/speech_client_config.json,sha256=GIPEJlprEQnenNRKQLYkPComXG-4nTxfgq07SaylvyM,1135
+gapic_google_cloud_speech_v1-0.15.3.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
+google/cloud/gapic/speech/v1/enums.pyc,,
+google/cloud/gapic/speech/v1/__init__.pyc,,
+google/cloud/gapic/speech/v1/speech_client.pyc,,

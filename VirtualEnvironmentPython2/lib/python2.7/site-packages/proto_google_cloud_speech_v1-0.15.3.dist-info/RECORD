@@ -1,0 +1,15 @@
+proto_google_cloud_speech_v1-0.15.3-py2.7-nspkg.pth,sha256=QtH3N-8GOEWH3u0sDjNTuT1rivpeSg8ZzCdcdiy26fE,6038
+google/cloud/proto/speech/v1/__init__.py,sha256=AbpHGcgLb-kRsJGnwFEktk7uzpZOCcBY74-YBdrKVGs,1
+google/cloud/proto/speech/v1/cloud_speech_pb2.py,sha256=kOBgCdXibU6xeuzx-p0f0z38e6UpCGZp-IxcHJp-4VM,45403
+google/cloud/proto/speech/v1/cloud_speech_pb2_grpc.py,sha256=7XCXUa4D2OM7HsxINQA86KCEi6rIF9OwZh2g6kAmLSU,4792
+proto_google_cloud_speech_v1-0.15.3.dist-info/DESCRIPTION.rst,sha256=fOI80maNf0CyNxNmVDUCRi5u8UE_I4yeoa5cQBDCn1I,254
+proto_google_cloud_speech_v1-0.15.3.dist-info/METADATA,sha256=fJtXGlkCZWZ4P9ELzoz8AU9nozyx9rB1XTg6yZiwJgU,1355
+proto_google_cloud_speech_v1-0.15.3.dist-info/RECORD,,
+proto_google_cloud_speech_v1-0.15.3.dist-info/WHEEL,sha256=BtVfdXUcEYLcFjOkbIrCFRyXU4qszVPt-E9o3RWkSNw,93
+proto_google_cloud_speech_v1-0.15.3.dist-info/metadata.json,sha256=PdZWdW_WsFDBOI8lQFeI4DuKyUKqzZdf0IGs0Jh1BF0,1189
+proto_google_cloud_speech_v1-0.15.3.dist-info/namespace_packages.txt,sha256=ZwzE_-U_yx2cDcmqlY3fHbj7sGSroALrkjfofv9KtH0,65
+proto_google_cloud_speech_v1-0.15.3.dist-info/top_level.txt,sha256=_1QvSJIhFAGfxb79D6DhB7SUw2X6T4rwnz_LLrbcD3c,7
+proto_google_cloud_speech_v1-0.15.3.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
+google/cloud/proto/speech/v1/__init__.pyc,,
+google/cloud/proto/speech/v1/cloud_speech_pb2.pyc,,
+google/cloud/proto/speech/v1/cloud_speech_pb2_grpc.pyc,,
