@@ -10,8 +10,8 @@ push_service = FCMNotification(api_key="AAAAXcxEn-s:APA91bFNEwRE8zcelyBM8dhbQ1hD
 
 # Get a reference to webcam #0 (the default one)
 video_capture = cv2.VideoCapture(0)
-# video_capture.set(3,1280)
-# video_capture.set(4,480)
+video_capture.set(3,7680)
+video_capture.set(4,4320)
 
 names = []
 
@@ -34,7 +34,7 @@ face_encodings = []
 face_names = []
 counter = 0
 notificationQueue = []
-scaling_factor = 3	# scale down the captured image by this much for efficiency
+scaling_factor = 2	# scale down the captured image by this much for efficiency
 
 # configure firebase
 config = {
@@ -204,7 +204,8 @@ def attemptToOpenDoor(name):
 	open.
     '''
 	if name != "Unknown":
-	    db.child("doors/door1/status").set(True)
+
+	    db.child("doors/door1").update({"status": False, "lastChanged":{".sv": "timestamp"}})
 
 # start the camera stream on the main thread
 while True:
@@ -214,8 +215,8 @@ while True:
     # Resize frame of video to 1/4 size for faster face recognition processing
     small_frame = cv2.resize(frame, (0, 0), fx=1.0/scaling_factor, fy=1.0/scaling_factor)
 
-    # Only process every other frame of video to save time
-    if counter % 12 == 0:
+    # Only process one of every 10 frames of video to save
+    if counter % 10 == 0:
         # Find all the faces and face encodings in the current frame of video
         face_locations = face_recognition.face_locations(small_frame)
         face_encodings = face_recognition.face_encodings(small_frame, face_locations)
